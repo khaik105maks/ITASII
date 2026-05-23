@@ -44,6 +44,25 @@
     button.addEventListener("click", () => applyLanguage(button.dataset.langSwitch));
   });
 
+  document.querySelectorAll("[data-menu-toggle]").forEach((button) => {
+    const header = button.closest(".site-header");
+    if (!header) return;
+
+    button.addEventListener("click", () => {
+      const isOpen = header.classList.toggle("is-open");
+      button.setAttribute("aria-expanded", String(isOpen));
+      button.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+    });
+
+    header.querySelectorAll(".nav-links a").forEach((link) => {
+      link.addEventListener("click", () => {
+        header.classList.remove("is-open");
+        button.setAttribute("aria-expanded", "false");
+        button.setAttribute("aria-label", "Open menu");
+      });
+    });
+  });
+
   document.querySelectorAll("[data-submission-link]").forEach((link) => {
     if (GOOGLE_FORM_URL !== "#") {
       link.href = GOOGLE_FORM_URL;

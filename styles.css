@@ -38,6 +38,8 @@ body {
 body.screen-page {
   height: 100svh;
   overflow: hidden;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
 }
 
 a {
@@ -72,13 +74,18 @@ html[data-lang="en"] .lang-uk {
   backdrop-filter: blur(12px);
 }
 
+.screen-page .site-header {
+  position: relative;
+  top: auto;
+}
+
 main > section {
   display: grid;
   align-items: center;
 }
 
 .screen-page main {
-  height: calc(100svh - var(--header-h));
+  min-height: 0;
   overflow-y: auto;
   overscroll-behavior-y: contain;
   scroll-behavior: smooth;
@@ -87,9 +94,13 @@ main > section {
 }
 
 .screen-page main > section {
-  min-height: calc(100svh - var(--header-h));
+  min-height: 100%;
   scroll-snap-align: start;
   scroll-snap-stop: always;
+}
+
+.screen-page > .site-footer {
+  display: none;
 }
 
 .nav-bar {
@@ -190,6 +201,38 @@ html[data-lang="en"] [data-lang-switch="en"] {
 .nav-links a:hover,
 .nav-links .is-active {
   color: var(--red);
+}
+
+.menu-toggle {
+  display: none;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--ink);
+  background: transparent;
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  width: 20px;
+  height: 2px;
+  display: block;
+  margin: 3px 0;
+  background: var(--ink);
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.site-header.is-open .menu-toggle span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.site-header.is-open .menu-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.site-header.is-open .menu-toggle span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 .button {
@@ -879,10 +922,11 @@ h2 em {
   body.screen-page {
     height: auto;
     overflow: visible;
+    display: block;
   }
 
   .screen-page main {
-    height: auto;
+    min-height: 0;
     overflow: visible;
     scroll-snap-type: none;
   }
@@ -891,15 +935,91 @@ h2 em {
     min-height: auto;
     scroll-snap-align: none;
   }
+
+  .screen-page > .site-footer {
+    display: block;
+  }
 }
 
 @media (max-width: 640px) {
   :root {
     --container: min(100% - 28px, 1280px);
-    --header-h: 156px;
-    --hero-y: clamp(34px, 5svh, 52px);
+    --header-h: 0px;
+    --hero-y: clamp(28px, 4svh, 42px);
     --section-y: clamp(34px, 5svh, 48px);
     --card-pad: clamp(22px, 4svh, 26px);
+  }
+
+  .site-header {
+    position: static;
+  }
+
+  .nav-bar {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    min-height: auto;
+    padding: 12px 0;
+    gap: 12px;
+  }
+
+  .brand {
+    width: auto;
+    min-width: 0;
+    gap: 12px;
+  }
+
+  .brand-mark {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    font-size: 12px;
+  }
+
+  .brand small {
+    max-width: 230px;
+    margin-top: 5px;
+    font-size: 10px;
+    line-height: 1.35;
+    letter-spacing: 0.14em;
+  }
+
+  .menu-toggle {
+    display: grid;
+  }
+
+  .nav-links {
+    grid-column: 1 / -1;
+    gap: 13px 17px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0;
+    border-top: 0 solid var(--line);
+    transition: max-height 220ms ease, opacity 160ms ease, padding 160ms ease, border-width 160ms ease;
+  }
+
+  .site-header.is-open .nav-links {
+    max-height: 420px;
+    opacity: 1;
+    padding-top: 18px;
+    border-top-width: 1px;
+  }
+
+  .nav-links > a:not(.button),
+  .nav-links .language-switch {
+    flex-basis: calc(50% - 9px);
+  }
+
+  .nav-links .language-switch {
+    margin-left: 0;
+  }
+
+  .nav-links .button-dark {
+    flex-basis: 100%;
+    min-height: 46px;
+    margin-top: 4px;
   }
 
   .hero,
@@ -915,21 +1035,18 @@ h2 em {
 
   h1,
   .page-hero h1 {
-    font-size: clamp(36px, 11vw, 44px);
+    font-size: clamp(34px, 10vw, 42px);
   }
 
   .hero h1 {
-    font-size: clamp(34px, 10vw, 42px);
+    font-size: clamp(31px, 9vw, 38px);
+    line-height: 1.04;
   }
 
   .section-heading h2,
   .cta-band h2,
   .two-column h2 {
     font-size: 38px;
-  }
-
-  .brand strong {
-    font-size: 22px;
   }
 
   .button {
@@ -951,6 +1068,7 @@ h2 em {
 
 @media (max-height: 760px) {
   :root {
+    --header-h: 82px;
     --hero-y: 34px;
     --section-y: 34px;
     --card-pad: 26px;
@@ -1012,22 +1130,6 @@ h2 em {
   .venue-placeholder {
     min-height: 280px;
   }
-
-  body.screen-page {
-    height: auto;
-    overflow: visible;
-  }
-
-  .screen-page main {
-    height: auto;
-    overflow: visible;
-    scroll-snap-type: none;
-  }
-
-  .screen-page main > section {
-    min-height: auto;
-    scroll-snap-align: none;
-  }
 }
 
 @media (max-height: 620px) {
@@ -1083,5 +1185,30 @@ h2 em {
 
   .track-art-logistics {
     height: 72px;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-header {
+    position: static;
+  }
+
+  .nav-bar {
+    min-height: auto;
+    padding: 12px 0;
+  }
+
+  .brand strong {
+    font-size: 24px;
+  }
+
+  .button,
+  .nav-links .button-dark {
+    min-height: 46px;
+  }
+
+  .hero h1 {
+    font-size: clamp(31px, 9vw, 38px);
+    line-height: 1.04;
   }
 }
