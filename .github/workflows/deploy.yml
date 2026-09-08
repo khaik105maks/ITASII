@@ -1,0 +1,39 @@
+name: Deploy ITASII to netcup
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: netcup-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    environment: production
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6.1.0
+        with:
+          persist-credentials: false
+
+      - name: Check and package website
+        run: |
+          node --check script.js
+          python3 tools/package_site.py
+          python3 -m zipfile -t dist/itasii-site.zip
+
+      - name: Deploy public files over SFTP
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          DEPLOY_PORT: ${{ vars.DEPLOY_PORT || '22' }}
+        run: bash tools/deploy_site.sh
