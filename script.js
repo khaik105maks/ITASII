@@ -106,8 +106,8 @@
   document.querySelectorAll("[data-submission-link]").forEach((link) => {
     if (GOOGLE_FORM_URL !== "#") {
       link.href = GOOGLE_FORM_URL;
-      link.target = "_blank";
-      link.rel = "noopener";
+      link.removeAttribute("target");
+      link.removeAttribute("rel");
     }
   });
 
