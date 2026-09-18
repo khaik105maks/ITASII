@@ -1,7 +1,7 @@
 (function () {
   const STORAGE_KEY = "itasii-language";
 
-  const GOOGLE_FORM_URL = "https://forms.gle/neyo1N3GvgPsrSu1A";
+  const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfYMQHLORX7aMpEQ5e6l9yeZOUBbi4naPXkgSxikCnv1dy8WQ/viewform";
 
   const root = document.documentElement;
   const currentPage = window.location.pathname.split("/").pop() || "index.html";
