@@ -6,10 +6,14 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 ROOT = Path(__file__).resolve().parent.parent
 PAGES = (
-    "index.html", "archive.html", "committee.html", "contacts.html",
-    "submission.html", "venue.html", "styles.css", "script.js",
+    "index.html", "about.html", "archive.html", "committee.html",
+    "contacts.html", "programme.html", "submission.html", "venue.html",
+    "styles.css", "script.js",
 )
-ASSET_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".ico", ".woff", ".woff2"}
+ASSET_EXTENSIONS = {
+    ".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".ico",
+    ".woff", ".woff2", ".docx", ".docm",
+}
 
 
 def main():
