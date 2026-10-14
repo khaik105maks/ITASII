@@ -28,7 +28,7 @@ python3 tools/package_site.py
 4. Відкрийте домен і перевірте сторінки, фото та перемикання UA/EN.
 
 Налаштування Document Root і SSL описані в
-[офіційній документації netcup](https://www.netcup.com/en/helpcenter/documentation/web-hosting/interface).
+
 Перед заміною наявного сайту збережіть його резервну копію.
 
 ## netcup VPS / Root Server
